@@ -48,7 +48,12 @@ export default async function handler(req: any, res: any) {
   });
 
   try {
-    const r = await fetch(`${process.env.AUGMENTOR_URL}/augment`, {
+    const augmentorUrl = process.env.AUGMENTOR_URL;
+    if (!augmentorUrl) {
+      throw new Error("AUGMENTOR_URL environment variable is not set");
+    }
+
+    const r = await fetch(`${augmentorUrl}/augment`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -58,11 +63,21 @@ export default async function handler(req: any, res: any) {
         seed: seed ?? Math.floor(Math.random() * 1e9)
       })
     });
-    if (!r.ok) throw new Error(await r.text());
+    
+    if (!r.ok) {
+      const errorText = await r.text();
+      throw new Error(`Augmentor service error: ${r.status} - ${errorText}`);
+    }
+    
     const data = await r.json();
+    await prisma.job.update({ where: { id: job.id }, data: { status: "completed" } });
     return res.json({ jobId: job.id, outputsBase64: data.outputsBase64 });
-  } catch (e) {
+  } catch (e: any) {
+    console.error("Job creation failed:", e);
     await prisma.job.update({ where: { id: job.id }, data: { status: "failed" } });
-    return res.status(500).json({ error: "augment failed" });
+    return res.status(500).json({ 
+      error: "augment failed", 
+      details: e.message || "Unknown error occurred" 
+    });
   }
 }

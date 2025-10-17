@@ -166,6 +166,11 @@ prisma/dev.db*
 logs
 *.log
 
+# Wallet files (NEVER commit private keys!)
+wallet.json
+*.wallet
+*.key
+
 # Runtime data
 pids
 *.pid

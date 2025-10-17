@@ -12,7 +12,8 @@ const DataCoinABI = [
 const getChainConfig = (chainName: string) => {
   const configs = {
     sepolia: {
-      rpc: process.env.SEPOLIA_RPC_URL || "https://1rpc.io/sepolia"
+      rpc: process.env.SEPOLIA_RPC_URL || "https://1rpc.io/sepolia",
+      datacoinAddress: process.env.DATACOIN_CONTRACT_ADDRESS || "0x33da15fdcaa8e7ca38ffe2048421d5e193100747"
     },
   };
   return configs[chainName as keyof typeof configs] || configs.sepolia;
@@ -25,8 +26,7 @@ export class TokenRewardService {
   
   constructor() {
     const chainName = "sepolia";
-    const dataCoinAddress = "0x33da15fdcaa8e7ca38ffe2048421d5e193100747";
-    const { rpc } = getChainConfig(chainName);
+    const { rpc, datacoinAddress } = getChainConfig(chainName);
     
     if (!process.env.PRIVATE_KEY) {
       throw new Error("PRIVATE_KEY environment variable is required");
