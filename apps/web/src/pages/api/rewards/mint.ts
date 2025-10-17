@@ -35,7 +35,7 @@ export class TokenRewardService {
     this.provider = new ethers.JsonRpcProvider(rpc);
     this.wallet = new ethers.Wallet(process.env.PRIVATE_KEY, this.provider);
     this.datacoinContract = new ethers.Contract(
-      dataCoinAddress,
+      datacoinAddress,
       DataCoinABI,
       this.wallet
     );

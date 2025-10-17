@@ -15,28 +15,17 @@ export default function Uploader({ datasetId, onRewardSuccess }: { datasetId: st
   const [seed, setSeed] = useState<number | undefined>(undefined);
   const { user } = usePrivy();
 
+  const GATEWAY = process.env.NEXT_PUBLIC_LIGHTHOUSE_GATEWAY!;
+  const API_KEY = process.env.NEXT_PUBLIC_LIGHTHOUSE_API_KEY!;
+
   async function uploadOriginalToLighthouse(file: File) {
     setStatus("Uploading original to Lighthouse...");
 
-    // Convert file to base64 for server-side upload
-    const fileBuffer = await file.arrayBuffer();
-    const base64File = Buffer.from(fileBuffer).toString('base64');
-
-    const response = await fetch('/api/upload/lighthouse', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ file: base64File }),
-    });
-
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Upload failed');
-    }
-
-    const result = await response.json();
-    return { cid: result.cid, url: result.url };
+    // Use Lighthouse SDK in browser environment with File object
+    const output = await lighthouse.upload([file], API_KEY);
+    const cid = output?.data?.Hash;
+    if (!cid) throw new Error("Lighthouse upload failed");
+    return { cid, url: `${GATEWAY}/${cid}` };
   }
 
   function base64ToFile(b64: string, fileName: string) {
