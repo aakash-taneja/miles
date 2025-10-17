@@ -1,0 +1,20 @@
+{
+  "folders": [
+    {
+      "name": "Miles Project",
+      "path": "."
+    }
+  ],
+  "settings": {
+    "git.detectSubmodules": false,
+    "git.autoRepositoryDetection": false
+  },
+  "extensions": {
+    "recommendations": [
+      "ms-python.python",
+      "bradlc.vscode-tailwindcss",
+      "esbenp.prettier-vscode",
+      "ms-vscode.vscode-typescript-next"
+    ]
+  }
+}
