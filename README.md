@@ -141,9 +141,9 @@ pip install fastapi uvicorn opencv-python albumentations numpy requests
 Create `.env` file in `apps/web/`:
 
 ```env
-# Lighthouse IPFS Configuration
-NEXT_PUBLIC_LIGHTHOUSE_API_KEY=your_lighthouse_api_key
-NEXT_PUBLIC_LIGHTHOUSE_GATEWAY=https://gateway.lighthouse.storage/ipfs
+# Lighthouse IPFS Configuration (Server-side only)
+LIGHTHOUSE_API_KEY=your_lighthouse_api_key
+LIGHTHOUSE_GATEWAY=https://gateway.lighthouse.storage/ipfs
 
 # Augmentor Service
 AUGMENTOR_URL=http://localhost:8001
