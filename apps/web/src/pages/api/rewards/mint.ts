@@ -25,20 +25,37 @@ export class TokenRewardService {
   private datacoinContract: ethers.Contract;
   
   constructor() {
+    console.log("🔍 TokenRewardService constructor called");
     const chainName = "sepolia";
     const { rpc, datacoinAddress } = getChainConfig(chainName);
     
+    console.log("Chain config:");
+    console.log("- chainName:", chainName);
+    console.log("- rpc:", rpc);
+    console.log("- datacoinAddress:", datacoinAddress);
+    
     if (!process.env.PRIVATE_KEY) {
+      console.log("❌ PRIVATE_KEY not found in environment");
       throw new Error("PRIVATE_KEY environment variable is required");
     }
     
+    console.log("✅ PRIVATE_KEY found in environment");
+    console.log("Creating ethers provider...");
     this.provider = new ethers.JsonRpcProvider(rpc);
+    console.log("✅ Provider created");
+    
+    console.log("Creating wallet...");
     this.wallet = new ethers.Wallet(process.env.PRIVATE_KEY, this.provider);
+    console.log("✅ Wallet created, address:", this.wallet.address);
+    
+    console.log("Creating contract instance...");
     this.datacoinContract = new ethers.Contract(
       datacoinAddress,
       DataCoinABI,
       this.wallet
     );
+    console.log("✅ Contract instance created");
+    console.log("✅ TokenRewardService constructor completed");
   }
 
   async mintTokens(address: string, amount: number): Promise<{ success: boolean; txHash?: string; error?: string }> {
@@ -70,10 +87,18 @@ export class TokenRewardService {
 
   async getBalance(address: string): Promise<string> {
     try {
+      console.log("🔍 getBalance called for address:", address);
+      console.log("Calling contract.balanceOf...");
       const balance = await this.datacoinContract.balanceOf(address);
-      return ethers.formatUnits(balance, 18);
-    } catch (error) {
-      console.error("Failed to get balance:", error);
+      console.log("✅ Raw balance from contract:", balance.toString());
+      const formattedBalance = ethers.formatUnits(balance, 18);
+      console.log("✅ Formatted balance:", formattedBalance);
+      return formattedBalance;
+    } catch (error:any) {
+      console.error("❌ Failed to get balance:");
+      console.error("Error message:", error.message);
+      console.error("Error stack:", error.stack);
+      console.error("Full error:", JSON.stringify(error, null, 2));
       return "0";
     }
   }
