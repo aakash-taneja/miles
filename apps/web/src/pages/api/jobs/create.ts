@@ -1,6 +1,4 @@
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "@/lib/prisma";
 
 type Body = { datasetId: string; sourceCid: string; sourceUrl: string; filename: string; recipe: string; count?: number; seed?: number; };
 

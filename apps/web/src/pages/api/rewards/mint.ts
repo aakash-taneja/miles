@@ -1,7 +1,5 @@
 import { ethers } from "ethers";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "@/lib/prisma";
 
 // DataCoin ABI (you'll need to add the actual ABI)
 const DataCoinABI = [
