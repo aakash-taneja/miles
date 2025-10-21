@@ -81,7 +81,7 @@ export class TokenRewardService {
 
 // API endpoint for minting tokens
 export default async function handler(req: any, res: any) {
-  if (req.method !== "POST") return res.status(405).end();
+  if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
   
   // Get the user address from the Authorization header
   const authHeader = req.headers.authorization;
