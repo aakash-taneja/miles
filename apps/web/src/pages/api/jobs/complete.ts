@@ -1,4 +1,6 @@
-import { prisma } from "@/lib/prisma";
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 type Body = { jobId: string; variants: { cid: string; url: string }[] };
 
